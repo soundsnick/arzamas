@@ -6,11 +6,11 @@
         "host": "localhost",
         "name": "arzamas",
         "user": "arzamas",
-        "password": "PASSWORD"
+        "password": "1-14-40ernazar"
       }
     },
 
-
+    
     "release": {
       "public": "path_to_public_dir",
       "domain": "http://mydomain.com",
