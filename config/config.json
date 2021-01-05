@@ -1,0 +1,24 @@
+{
+    "debug": {
+      "public": "public",
+      "domain": "http://localhost:8080",
+      "database": {
+        "host": "localhost",
+        "name": "arzamas",
+        "user": "arzamas",
+        "password": "1-14-40ernazar"
+      }
+    },
+
+    
+    "release": {
+      "public": "path_to_public_dir",
+      "domain": "http://mydomain.com",
+      "database": {
+        "host": "192.168.0.1",
+        "name": "ginblog",
+        "user": "your_db_user",
+        "password": "your_db_user_password"
+      }
+    }
+  }
