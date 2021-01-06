@@ -18,24 +18,26 @@ var user User
 
 // BeforeSave - hook being executed before each save
 func (user *User) BeforeSave() (err error) {
-	var hash []byte
-	hash, err = bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := EncryptPassword(user.Password)
 	if err != nil {
 		return
 	}
-	user.Password = string(hash)
+	user.Password = hashedPassword
 	return
 }
 
-// User methods
+// EncryptPassword generates hash from password
+func EncryptPassword(password string) (string, error) {
+	var hash []byte
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hash), err
+}
 
 // GetUserByEmail - get user row by email
-func GetUserByEmail(email string) interface{} {
-	user := GetDB().Find(&user, "email = ?", email)
-	if user.Error != nil {
-		return nil
-	}
-	return user.Value
+func GetUserByEmail(email string) User {
+	user := User{}
+	GetDB().Where("email = ?", email).First(&user)
+	return user
 }
 
 // GetUsersByName - get user collection by name
