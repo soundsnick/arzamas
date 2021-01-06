@@ -31,7 +31,7 @@ func (user *User) BeforeSave() (err error) {
 
 // GetUserByEmail - get user row by email
 func GetUserByEmail(email string) interface{} {
-	user := GetDB().Take(&user, "email = ?", email)
+	user := GetDB().Find(&user, "email = ?", email)
 	if user.Error != nil {
 		return nil
 	}

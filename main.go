@@ -18,11 +18,9 @@ func main() {
 
 	router.GET("/", controllers.IndexPage)
 	router.GET("/posts", controllers.PostIndex)
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	router.GET("/users/email/:email", controllers.UserByEmail)
+	router.GET("/users/name/:name", controllers.UsersByName)
+	router.GET("/users/last_name/:name", controllers.UsersByLastName)
 
 	// Run listener
 	router.Run()

@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//DatabaseConfig contains database connection info
+// DatabaseConfig contains database connection info
 type DatabaseConfig struct {
 	Host     string
 	Name     string //database name
@@ -19,12 +19,13 @@ type DatabaseConfig struct {
 	Password string
 }
 
+// Configs type
 type Configs struct {
 	Debug   Config
 	Release Config
 }
 
-//Config contains application configuration for active gin mode
+// Config contains application configuration for active gin mode
 type Config struct {
 	Public        string `json:"public"`
 	Domain        string `json:"domain"`
@@ -33,10 +34,10 @@ type Config struct {
 	Database      DatabaseConfig
 }
 
-//current loaded config
+// current loaded config
 var config *Config
 
-//LoadConfig unmarshals config for current GIN_MODE
+// LoadConfig unmarshals config for current GIN_MODE
 func LoadConfig() {
 	data, err := ioutil.ReadFile("config/config.json")
 	if err != nil {
@@ -64,22 +65,22 @@ func LoadConfig() {
 	}
 }
 
-//GetConfig returns actual config
+// GetConfig returns actual config
 func GetConfig() *Config {
 	return config
 }
 
-//PublicPath returns path to application public folder
+// PublicPath returns path to application public folder
 func PublicPath() string {
 	return config.Public
 }
 
-//UploadsPath returns path to public/uploads folder
+// UploadsPath returns path to public/uploads folder
 func UploadsPath() string {
 	return path.Join(config.Public, "uploads")
 }
 
-//GetConnectionString returns a database connection string
+// GetConnectionString returns a database connection string
 func GetConnectionString() string {
 	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", config.Database.Host, config.Database.User, config.Database.Password, config.Database.Name)
 }
