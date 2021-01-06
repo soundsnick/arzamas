@@ -12,6 +12,7 @@ type Post struct {
 	Title     string `form:"title" binding:"required"`
 	Content   string `form:"content"`
 	Published bool   `form:"published"`
+	Cover     string `form:"cover"`
 	UserID    uint64
 	User      User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
 }
