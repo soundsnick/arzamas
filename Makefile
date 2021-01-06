@@ -1,7 +1,7 @@
 build:
 	go build -o api
 
-debug:
+dev:
 	go run main.go 
 
 test:
