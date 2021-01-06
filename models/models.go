@@ -2,10 +2,13 @@ package models
 
 import (
 	"time"
+
 	"github.com/jinzhu/gorm"
+	// Use postgres dialect for GORM
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
+// Model - General struct for models
 type Model struct {
 	ID        uint64     `form:"id" gorm:"primary_key"`
 	CreatedAt time.Time  `binding:"-" form:"-"`
@@ -15,6 +18,7 @@ type Model struct {
 
 var db *gorm.DB
 
+// SetDB Configures DB
 func SetDB(connection string) {
 	var err error
 	db, err = gorm.Open("postgres", connection)
@@ -23,10 +27,12 @@ func SetDB(connection string) {
 	}
 }
 
+// GetDB Returns DB Instance
 func GetDB() *gorm.DB {
 	return db
 }
 
+// AutoMigrate migrates models
 func AutoMigrate() {
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{}, &Post{})
 }

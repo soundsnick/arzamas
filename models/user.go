@@ -4,17 +4,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Login struct {
-	Email    string `form:"email" binding:"required"`
-	Password string `form:"password" binding:"required"`
-}
-
-type Register struct {
-	Name     string `form:"name" binding:"required"`
-	Email    string `form:"email" binding:"required"`
-	Password string `form:"password" binding:"required"`
-}
-
+// User model
 type User struct {
 	Model
 
@@ -23,8 +13,10 @@ type User struct {
 	LastName string `form:"last_name"`
 	Password string `form:"password" binding:"required"`
 }
+
 var user User
 
+// BeforeSave - hook being executed before each save
 func (user *User) BeforeSave() (err error) {
 	var hash []byte
 	hash, err = bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -35,11 +27,10 @@ func (user *User) BeforeSave() (err error) {
 	return
 }
 
-
-
-
 // User methods
-func GetUserByEmail(email string) interface {} {
+
+// GetUserByEmail - get user row by email
+func GetUserByEmail(email string) interface{} {
 	user := GetDB().Take(&user, "email = ?", email)
 	if user.Error != nil {
 		return nil
@@ -47,8 +38,18 @@ func GetUserByEmail(email string) interface {} {
 	return user.Value
 }
 
-func GetUsersByName(name string) interface {} {
+// GetUsersByName - get user collection by name
+func GetUsersByName(name string) interface{} {
 	users := GetDB().Where("name LIKE ?", "%"+name+"%").Find(&user)
+	if users.Error != nil {
+		return nil
+	}
+	return users.Value
+}
+
+// GetUsersByLastName - get user collection by last name
+func GetUsersByLastName(lastName string) interface{} {
+	users := GetDB().Where("last_name LIKE ?", "%"+lastName+"%").Find(&user)
 	if users.Error != nil {
 		return nil
 	}
