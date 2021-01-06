@@ -25,3 +25,9 @@ func (post *Post) HTMLContent() template.HTML {
 func (post *Post) URL() string {
 	return fmt.Sprintf("/posts/%d", post.ID)
 }
+
+// GetPostsAll returns a collection of all posts
+func GetPostsAll() interface{} {
+	var posts []Post
+	return GetDB().Preload("User").Find(&posts).Value
+}
