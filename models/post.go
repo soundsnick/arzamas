@@ -3,18 +3,18 @@ package models
 import (
 	"fmt"
 	"html/template"
+	"strings"
 )
 
 // Post model
 type Post struct {
 	Model
 
-	Title     string `form:"title" binding:"required"`
-	Content   string `form:"content"`
-	Published bool   `form:"published"`
-	Cover     string `form:"cover"`
-	UserID    uint64
-	User      User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
+	Title   string `form:"title" binding:"required"`
+	Content string `form:"content"`
+	Cover   string `form:"cover"`
+	UserID  uint64
+	User    User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
 }
 
 // HTMLContent returns html content that won't be escaped
@@ -44,7 +44,7 @@ func GetPostByID(id uint64) Post {
 // GetPostsByTitle returns posts by title
 func GetPostsByTitle(payload string) []Post {
 	var posts []Post
-	GetDB().Preload("User").Where("title LIKE ?", "%"+payload+"%").Find(&posts)
+	GetDB().Preload("User").Where("LOWER(title) LIKE ?", strings.ToLower(payload)+"%").Find(&posts)
 	return posts
 }
 

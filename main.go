@@ -22,14 +22,17 @@ func main() {
 
 	// Post routes
 	router.GET("/posts", controllers.PostIndex)
+	router.GET("/post/read/:id", controllers.PostGet)
+	router.GET("/posts/search", controllers.PostSearch)
+	router.GET("/post/create", controllers.PostCreate)
 
 	// User routes
 	router.GET("/users/email/:email", controllers.UserByEmail)
 	router.GET("/users/name/:name", controllers.UsersByName)
 	router.GET("/users/last_name/:name", controllers.UsersByLastName)
 
-	router.GET("/user/auth", controllers.UserAuthenticate)
-	router.GET("/user/register", controllers.UserRegister)
+	router.POST("/user/auth", controllers.UserAuthenticate)
+	router.POST("/user/register", controllers.UserRegister)
 
 	// Run listener
 	router.Run()

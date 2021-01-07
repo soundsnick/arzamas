@@ -11,7 +11,7 @@ import (
 type User struct {
 	Model
 
-	Email    string `form:"email" binding:"required"`
+	Email    string `form:"email" binding:"required" json:"-"`
 	Name     string `form:"name"`
 	LastName string `form:"last_name"`
 	Password string `form:"password" binding:"required" json:"-"`
@@ -41,23 +41,30 @@ func EncryptPassword(password string) (string, error) {
 	return string(hash), err
 }
 
-// GetUserByEmail - get user row by email
+// GetUserByEmail returns user by email
 func GetUserByEmail(email string) User {
-	user := User{}
+	var user User
 	GetDB().Where("email = ?", email).First(&user)
 	return user
 }
 
-// GetUsersByName - get user collection by name
+// GetUsersByName returns user collection by name
 func GetUsersByName(name string) []User {
 	var users []User
 	GetDB().Where("name LIKE ?", "%"+name+"%").Find(&users)
 	return users
 }
 
-// GetUsersByLastName - get user collection by last name
+// GetUsersByLastName returns user collection by last name
 func GetUsersByLastName(lastName string) []User {
 	var users []User
 	GetDB().Where("last_name LIKE ?", "%"+lastName+"%").Find(&users)
 	return users
+}
+
+// GetUserByToken returns user by token
+func GetUserByToken(token string) User {
+	var session Session
+	GetDB().Preload("User").Where("token = ?", token).Find(&session)
+	return session.User
 }

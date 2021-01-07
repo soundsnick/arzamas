@@ -1,13 +1,12 @@
 package helpers
 
 import (
-	"errors"
 	"net"
 	"regexp"
 	"strings"
 )
 
-// UserRegistrationForm is a type for UserRegistration input
+// UserRegistrationForm type for UserRegistration input
 type UserRegistrationForm struct {
 	Email                string
 	Name                 string
@@ -16,8 +15,6 @@ type UserRegistrationForm struct {
 	PasswordConfirmation string
 }
 
-// ErrValidation for validation erroring
-var ErrValidation = errors.New("validation error")
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 // ValidateUserRegistration validates UserRegistration input
