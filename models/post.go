@@ -28,7 +28,29 @@ func (post *Post) URL() string {
 }
 
 // GetPostsAll returns a collection of all posts
-func GetPostsAll() interface{} {
+func GetPostsAll() []Post {
 	var posts []Post
-	return GetDB().Preload("User").Find(&posts).Value
+	GetDB().Preload("User").Find(&posts)
+	return posts
+}
+
+// GetPostByID return post by id
+func GetPostByID(id uint64) Post {
+	var post Post
+	GetDB().Preload("User").Where("id = ?", id).Find(&post)
+	return post
+}
+
+// GetPostsByTitle returns posts by title
+func GetPostsByTitle(payload string) []Post {
+	var posts []Post
+	GetDB().Preload("User").Where("title LIKE ?", "%"+payload+"%").Find(&posts)
+	return posts
+}
+
+// GetPostsByUserID return posts of user
+func GetPostsByUserID(userID uint64) []Post {
+	var posts []Post
+	GetDB().Preload("User").Where("user_id = ?", userID).Find(&posts)
+	return posts
 }

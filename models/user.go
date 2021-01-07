@@ -49,19 +49,15 @@ func GetUserByEmail(email string) User {
 }
 
 // GetUsersByName - get user collection by name
-func GetUsersByName(name string) interface{} {
-	users := GetDB().Where("name LIKE ?", "%"+name+"%").Find(&user)
-	if users.Error != nil {
-		return nil
-	}
-	return users.Value
+func GetUsersByName(name string) []User {
+	var users []User
+	GetDB().Where("name LIKE ?", "%"+name+"%").Find(&users)
+	return users
 }
 
 // GetUsersByLastName - get user collection by last name
-func GetUsersByLastName(lastName string) interface{} {
-	users := GetDB().Where("last_name LIKE ?", "%"+lastName+"%").Find(&user)
-	if users.Error != nil {
-		return nil
-	}
-	return users.Value
+func GetUsersByLastName(lastName string) []User {
+	var users []User
+	GetDB().Where("last_name LIKE ?", "%"+lastName+"%").Find(&users)
+	return users
 }
