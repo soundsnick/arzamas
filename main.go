@@ -26,7 +26,7 @@ func main() {
 	router.GET("/post/read/:id", controllers.PostGet)
 	router.GET("/posts/search", controllers.PostSearch)
 	router.POST("/post/create", controllers.PostCreate)
-	router.GET("/post/delete/:id", controllers.PostDelete)
+	router.DELETE("/post/delete/:id", controllers.PostDelete)
 	router.GET("/posts/user/:user_id", controllers.PostUser)
 
 	// User routes
