@@ -48,9 +48,19 @@ func UserAuthenticate(c *gin.Context) {
 				"error": "wrong email or password",
 			})
 		} else {
-			c.JSON(200, gin.H{
-				"user": user,
-			})
+			models.DeleteOrphanSession(c.ClientIP())
+			session := models.Session{Token: models.GenerateToken(), UserID: user.ID, IP: c.ClientIP()}
+			sessionRes := models.GetDB().Create(&session)
+			if sessionRes.Error != nil {
+				c.JSON(422, gin.H{
+					"error": sessionRes.Error,
+				})
+			} else {
+				c.JSON(200, gin.H{
+					"user":  user,
+					"token": session.Token,
+				})
+			}
 		}
 	} else {
 		c.JSON(400, gin.H{
