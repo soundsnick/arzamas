@@ -16,7 +16,6 @@ func main() {
 	config.LoadConfig()
 	models.SetDB(config.GetConnectionString())
 	models.AutoMigrate()
-	// config.SeedTestPosts()
 
 	// Application routes
 	router.GET("/", controllers.IndexPage)

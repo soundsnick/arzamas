@@ -1,6 +1,9 @@
 package models
 
 import (
+	"strings"
+
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,6 +26,11 @@ func (user *User) BeforeSave() (err error) {
 		return
 	}
 	user.Password = hashedPassword
+	user.Name = strings.Title(user.Name)
+	user.LastName = strings.Title(user.LastName)
+	logrus.WithFields(logrus.Fields{
+		"event": "NEWUSER",
+	}).Infof("%s is registered", user.Email)
 	return
 }
 

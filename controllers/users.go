@@ -59,7 +59,7 @@ func UserAuthenticate(c *gin.Context) {
 				})
 			} else {
 				c.JSON(200, gin.H{
-					"user":  user.FilterPassword(),
+					"user":  user,
 					"token": session.Token,
 				})
 			}
