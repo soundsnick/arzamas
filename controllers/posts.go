@@ -97,3 +97,18 @@ func PostCreate(c *gin.Context) {
 		}
 	}
 }
+
+// PostDelete deletes post
+func PostDelete(c *gin.Context) {
+	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(422, gin.H{
+			"error": "wrong id",
+		})
+	} else {
+		models.DeletePostByID(ID)
+		c.JSON(200, gin.H{
+			"message": "deleted",
+		})
+	}
+}

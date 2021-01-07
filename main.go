@@ -21,10 +21,12 @@ func main() {
 	router.GET("/", controllers.IndexPage)
 
 	// Post routes
+	// TODO: UPDATE, DELETE
 	router.GET("/posts", controllers.PostIndex)
 	router.GET("/post/read/:id", controllers.PostGet)
 	router.GET("/posts/search", controllers.PostSearch)
-	router.GET("/post/create", controllers.PostCreate)
+	router.POST("/post/create", controllers.PostCreate)
+	router.GET("/post/delete/:id", controllers.PostDelete)
 	router.GET("/posts/user/:user_id", controllers.PostUser)
 
 	// User routes

@@ -24,6 +24,6 @@ func GenerateToken() string {
 
 // DeleteOrphanSession deletes currently active sessions from the same IP
 func DeleteOrphanSession(ip string) {
-	sessions := []Session{}
+	var sessions []Session
 	GetDB().Where("ip = ?", ip).Delete(&sessions)
 }

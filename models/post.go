@@ -42,3 +42,10 @@ func GetPostsByUserID(userID uint64) []Post {
 	GetDB().Preload("User").Where("user_id = ?", userID).Order("created_at desc").Find(&posts)
 	return posts
 }
+
+// DeletePostByID deletes post
+func DeletePostByID(id uint64) Post {
+	var post Post
+	GetDB().Where("id = ?", id).Delete(&post)
+	return post
+}
