@@ -25,6 +25,7 @@ func main() {
 	router.GET("/post/read/:id", controllers.PostGet)
 	router.GET("/posts/search", controllers.PostSearch)
 	router.GET("/post/create", controllers.PostCreate)
+	router.GET("/posts/user/:user_id", controllers.PostUser)
 
 	// User routes
 	router.GET("/users/email/:email", controllers.UserByEmail)

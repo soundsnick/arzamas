@@ -46,6 +46,20 @@ func PostSearch(c *gin.Context) {
 	}
 }
 
+// PostUser user's posts
+func PostUser(c *gin.Context) {
+	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(422, gin.H{
+			"error": "wrong user_id",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"data": models.GetPostsByUserID(userID),
+		})
+	}
+}
+
 // PostCreate creates post
 func PostCreate(c *gin.Context) {
 	form := helpers.PostForm{

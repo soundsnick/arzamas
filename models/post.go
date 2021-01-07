@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-	"html/template"
 	"strings"
 )
 
@@ -17,20 +15,10 @@ type Post struct {
 	User    User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
 }
 
-// HTMLContent returns html content that won't be escaped
-func (post *Post) HTMLContent() template.HTML {
-	return template.HTML(post.Content)
-}
-
-// URL returns the post's canonical url
-func (post *Post) URL() string {
-	return fmt.Sprintf("/posts/%d", post.ID)
-}
-
 // GetPostsAll returns a collection of all posts
 func GetPostsAll() []Post {
 	var posts []Post
-	GetDB().Preload("User").Find(&posts)
+	GetDB().Preload("User").Order("created_at desc").Find(&posts)
 	return posts
 }
 
@@ -44,13 +32,13 @@ func GetPostByID(id uint64) Post {
 // GetPostsByTitle returns posts by title
 func GetPostsByTitle(payload string) []Post {
 	var posts []Post
-	GetDB().Preload("User").Where("LOWER(title) LIKE ?", strings.ToLower(payload)+"%").Find(&posts)
+	GetDB().Preload("User").Where("LOWER(title) LIKE ?", strings.ToLower(payload)+"%").Order("created_at desc").Find(&posts)
 	return posts
 }
 
 // GetPostsByUserID return posts of user
 func GetPostsByUserID(userID uint64) []Post {
 	var posts []Post
-	GetDB().Preload("User").Where("user_id = ?", userID).Find(&posts)
+	GetDB().Preload("User").Where("user_id = ?", userID).Order("created_at desc").Find(&posts)
 	return posts
 }
