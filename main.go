@@ -16,7 +16,7 @@ func main() {
 	config.LoadConfig()
 	models.SetDB(config.GetConnectionString())
 	models.AutoMigrate()
-	config.SeedTestPosts()
+	// config.SeedTestPosts()
 
 	// Application routes
 	router.GET("/", controllers.IndexPage)
@@ -28,7 +28,9 @@ func main() {
 	router.GET("/users/email/:email", controllers.UserByEmail)
 	router.GET("/users/name/:name", controllers.UsersByName)
 	router.GET("/users/last_name/:name", controllers.UsersByLastName)
+
 	router.GET("/user/auth", controllers.UserAuthenticate)
+	router.GET("/user/register", controllers.UserRegister)
 
 	// Run listener
 	router.Run()

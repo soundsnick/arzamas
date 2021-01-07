@@ -11,8 +11,8 @@ type Session struct {
 
 	Token  string `form:"token" binding:"required"`
 	UserID uint64
-	IP     string
-	User   User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
+	IP     string `json:"-"`
+	User   User   `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
 }
 
 // GenerateToken returns hash token

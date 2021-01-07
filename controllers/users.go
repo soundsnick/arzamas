@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/soundsnick/arzamas/helpers"
 	"github.com/soundsnick/arzamas/models"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -49,6 +50,7 @@ func UserAuthenticate(c *gin.Context) {
 			})
 		} else {
 			models.DeleteOrphanSession(c.ClientIP())
+			// Authorise user and return token
 			session := models.Session{Token: models.GenerateToken(), UserID: user.ID, IP: c.ClientIP()}
 			sessionRes := models.GetDB().Create(&session)
 			if sessionRes.Error != nil {
@@ -57,7 +59,7 @@ func UserAuthenticate(c *gin.Context) {
 				})
 			} else {
 				c.JSON(200, gin.H{
-					"user":  user,
+					"user":  user.FilterPassword(),
 					"token": session.Token,
 				})
 			}
@@ -65,6 +67,53 @@ func UserAuthenticate(c *gin.Context) {
 	} else {
 		c.JSON(400, gin.H{
 			"error": "email and password required",
+		})
+	}
+}
+
+// UserRegister registers user
+func UserRegister(c *gin.Context) {
+	form := helpers.UserRegistrationForm{
+		Email:                c.Query("email"),
+		Name:                 c.Query("name"),
+		LastName:             c.Query("last_name"),
+		Password:             c.Query("password"),
+		PasswordConfirmation: c.Query("password_confirmation"),
+	}
+
+	// Check validation
+	validatedField, validateErr := helpers.ValidateUserRegistration(form)
+
+	if validateErr == nil {
+
+		// Check if user exists
+		user := models.GetUserByEmail(form.Email)
+		if user.ID == 0 {
+			userNew := models.User{Name: form.Name, LastName: form.LastName, Email: form.Email, Password: form.Password}
+			models.GetDB().Create(&userNew)
+
+			// Authorise user and return token
+			session := models.Session{Token: models.GenerateToken(), UserID: userNew.ID, IP: c.ClientIP()}
+			sessionRes := models.GetDB().Create(&session)
+			if sessionRes.Error != nil {
+				c.JSON(422, gin.H{
+					"error": sessionRes.Error,
+				})
+			} else {
+				c.JSON(200, gin.H{
+					"user":  userNew,
+					"token": session.Token,
+				})
+			}
+		} else {
+			c.JSON(422, gin.H{
+				"error": "already exists",
+			})
+		}
+	} else {
+		c.JSON(400, gin.H{
+			"error": validateErr,
+			"field": validatedField,
 		})
 	}
 }

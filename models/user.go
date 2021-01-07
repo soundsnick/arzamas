@@ -11,7 +11,7 @@ type User struct {
 	Email    string `form:"email" binding:"required"`
 	Name     string `form:"name"`
 	LastName string `form:"last_name"`
-	Password string `form:"password" binding:"required"`
+	Password string `form:"password" binding:"required" json:"-"`
 }
 
 var user User
