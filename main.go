@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"github.com/soundsnick/arzamas/config"
 	"github.com/soundsnick/arzamas/controllers"
 	"github.com/soundsnick/arzamas/models"
@@ -11,6 +12,7 @@ func main() {
 	router := gin.Default()
 
 	// Load configurations
+	initLogger()
 	config.LoadConfig()
 	models.SetDB(config.GetConnectionString())
 	models.AutoMigrate()
@@ -30,4 +32,13 @@ func main() {
 
 	// Run listener
 	router.Run()
+}
+
+//initLogger initializes logrus logger with some defaults
+func initLogger() {
+	logrus.SetFormatter(&logrus.TextFormatter{})
+	//logrus.SetOutput(os.Stderr)
+	if gin.Mode() == gin.DebugMode {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 }
