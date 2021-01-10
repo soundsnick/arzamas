@@ -25,19 +25,21 @@ func main() {
 	// Post routes
 	router.GET("/posts", handlers.PostIndex)
 	router.GET("/posts/search", handlers.PostSearch)
-	router.GET("/post/create", handlers.PostCreate)
-	router.GET("/post/read/:id", handlers.PostRead)
-	router.GET("/post/update/:id", handlers.PostUpdate)
-	router.DELETE("/post/delete/:id", handlers.PostDelete)
 	router.GET("/posts/user/:user_id", handlers.PostUser)
+
+	// Post CRUD
+	router.POST("/post/create", handlers.PostCreate)
+	router.GET("/post/read/:id", handlers.PostRead)
+	router.PUT("/post/update/:id", handlers.PostUpdate)
+	router.DELETE("/post/delete/:id", handlers.PostDelete)
 
 	// User routes
 	router.GET("/users/email/:email", handlers.UserByEmail)
 	router.GET("/users/name/:name", handlers.UsersByName)
 	router.GET("/users/last_name/:name", handlers.UsersByLastName)
 
-	router.GET("/user/auth", handlers.UserAuthenticate)
-	router.GET("/user/register", handlers.UserRegister)
+	router.POST("/user/auth", handlers.UserAuthenticate)
+	router.POST("/user/register", handlers.UserRegister)
 
 	// Run listener
 	router.Run()
