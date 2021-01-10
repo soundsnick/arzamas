@@ -37,9 +37,13 @@ func main() {
 	router.GET("/users/email/:email", handlers.UserByEmail)
 	router.GET("/users/name/:name", handlers.UsersByName)
 	router.GET("/users/last_name/:name", handlers.UsersByLastName)
+
+	// User CRUD(RUD)
 	router.GET("/user/read/:id", handlers.UserRead)
+	router.PUT("/user/update", handlers.UserUpdate)
 	router.DELETE("/user/delete", handlers.UserDelete)
 
+	// User authentication
 	router.POST("/user/auth", handlers.UserAuthenticate)
 	router.POST("/user/register", handlers.UserRegister)
 

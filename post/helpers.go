@@ -1,8 +1,6 @@
 package post
 
 import (
-	"net/url"
-
 	"github.com/soundsnick/arzamas/core"
 )
 
@@ -22,7 +20,7 @@ func ValidateCreationForm(form CreationForm) (string, error) {
 	if !IsContentValid(form.Content) {
 		return "content", core.ErrValidation
 	}
-	if !IsCoverValid(form.Cover) {
+	if !core.IsURL(form.Cover) {
 		return "cover", core.ErrValidation
 	}
 	if form.Token == "" {
@@ -44,7 +42,7 @@ func ValidateUpdateForm(form *CreationForm, postCurrent Post) (string, error) {
 		form.Content = postCurrent.Content
 	}
 	if form.Cover != "" {
-		if !IsCoverValid(form.Cover) {
+		if !core.IsURL(form.Cover) {
 			return "cover", core.ErrValidation
 		}
 	} else {
@@ -59,19 +57,6 @@ func ValidateUpdateForm(form *CreationForm, postCurrent Post) (string, error) {
 // IsContentValid validates content
 func IsContentValid(t string) bool {
 	if len(t) < 30 {
-		return false
-	}
-	return true
-}
-
-// IsCoverValid validates cover
-func IsCoverValid(c string) bool {
-	_, err := url.Parse(c)
-
-	if err != nil {
-		return false
-	}
-	if c == "" {
 		return false
 	}
 	return true

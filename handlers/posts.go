@@ -134,7 +134,7 @@ func PostUpdate(c *gin.Context) {
 				postFound.Cover = form.Cover
 				core.GetDB().Save(&postFound)
 				c.JSON(200, gin.H{
-					"data": form,
+					"data": postFound,
 				})
 			}
 		}

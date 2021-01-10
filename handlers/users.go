@@ -138,6 +138,39 @@ func UserRead(c *gin.Context) {
 	}
 }
 
+// UserUpdate updates post
+func UserUpdate(c *gin.Context) {
+	userFound := session.GetUserByToken(c.Query("token"))
+	if userFound.ID == 0 {
+		c.JSON(422, gin.H{
+			"error": "unauthorised: wrong token",
+		})
+	} else {
+		form := user.UpdateForm{
+			Token:    c.Query("token"),
+			Name:     c.Query("name"),
+			LastName: c.Query("last_name"),
+			Avatar:   c.Query("avatar"),
+		}
+		validatedField, validateErr := user.ValidateUpdateForm(&form, userFound)
+		if validateErr != nil {
+			c.JSON(422, gin.H{
+				"error": validateErr,
+				"field": validatedField,
+			})
+		} else {
+			userFound.Name = form.Name
+			userFound.LastName = form.LastName
+			userFound.Avatar = form.Avatar
+			core.GetDB().Save(&userFound)
+			c.JSON(200, gin.H{
+				"data": userFound,
+			})
+		}
+	}
+
+}
+
 // UserDelete deletes post
 func UserDelete(c *gin.Context) {
 	token := c.Query("token")

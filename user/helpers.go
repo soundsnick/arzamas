@@ -18,6 +18,14 @@ type RegistrationForm struct {
 	PasswordConfirmation string
 }
 
+// UpdateForm type for UserRegistration input
+type UpdateForm struct {
+	Name     string
+	LastName string
+	Avatar   string
+	Token    string
+}
+
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 // ValidateRegistrationForm validates UserRegistration input
@@ -36,6 +44,35 @@ func ValidateRegistrationForm(form RegistrationForm) (string, error) {
 	}
 	if !IsPasswordConfirmationValid(form.Password, form.PasswordConfirmation) {
 		return "password_confirmation", core.ErrValidation
+	}
+	return "ok", nil
+}
+
+// ValidateUpdateForm validates User input
+func ValidateUpdateForm(form *UpdateForm, userCurrent User) (string, error) {
+	if form.Name != "" {
+		if !IsNameValid(form.Name) {
+			return "name", core.ErrValidation
+		}
+	} else {
+		form.Name = userCurrent.Name
+	}
+	if form.LastName != "" {
+		if !IsNameValid(form.LastName) {
+			return "last_name", core.ErrValidation
+		}
+	} else {
+		form.LastName = userCurrent.LastName
+	}
+	if form.Avatar != "" {
+		if !core.IsURL(form.Avatar) {
+			return "avatar", core.ErrValidation
+		}
+	} else {
+		form.Avatar = userCurrent.Avatar
+	}
+	if form.Token == "" {
+		return "token", core.ErrValidation
 	}
 	return "ok", nil
 }
