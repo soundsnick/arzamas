@@ -3,6 +3,8 @@ package handlers
 import (
 	"strconv"
 
+	"github.com/soundsnick/arzamas/shared"
+
 	"github.com/gin-gonic/gin"
 	"github.com/soundsnick/arzamas/core"
 	"github.com/soundsnick/arzamas/post"
@@ -157,6 +159,7 @@ func PostDelete(c *gin.Context) {
 				"error": "wrong id",
 			})
 		} else {
+			shared.DeleteCommentsByPostID(ID)
 			post.DeleteByID(ID)
 			c.JSON(200, gin.H{
 				"message": "deleted",

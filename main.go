@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"github.com/soundsnick/arzamas/comment"
 	"github.com/soundsnick/arzamas/core"
 	"github.com/soundsnick/arzamas/handlers"
 	"github.com/soundsnick/arzamas/post"
@@ -33,6 +34,9 @@ func main() {
 	router.PUT("/post/update/:id", handlers.PostUpdate)
 	router.DELETE("/post/delete/:id", handlers.PostDelete)
 
+	// Comment CRUD
+	router.POST("/comment/create/:id", handlers.CommentCreate)
+
 	// User routes
 	router.GET("/users/email/:email", handlers.UserByEmail)
 	router.GET("/users/name/:name", handlers.UsersByName)
@@ -62,5 +66,5 @@ func initLogger() {
 
 // AutoMigrate migrates models
 func AutoMigrate() {
-	core.GetDB().AutoMigrate(&user.User{}, &post.Post{}, &session.Session{})
+	core.GetDB().AutoMigrate(&user.User{}, &post.Post{}, &session.Session{}, &comment.Comment{})
 }
