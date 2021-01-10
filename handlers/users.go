@@ -1,6 +1,10 @@
 package handlers
 
 import (
+	"strconv"
+
+	"github.com/soundsnick/arzamas/shared"
+
 	"github.com/gin-gonic/gin"
 	"github.com/soundsnick/arzamas/core"
 	"github.com/soundsnick/arzamas/session"
@@ -115,6 +119,39 @@ func UserRegister(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"error": validateErr,
 			"field": validatedField,
+		})
+	}
+}
+
+// UserRead reads user
+func UserRead(c *gin.Context) {
+	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	userFound := user.GetByID(ID)
+	if userFound.ID == 0 || err != nil {
+		c.JSON(200, gin.H{
+			"error": "not found",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"data": userFound,
+		})
+	}
+}
+
+// UserDelete deletes post
+func UserDelete(c *gin.Context) {
+	token := c.Query("token")
+	userFound := session.GetUserByToken(token)
+	if userFound.ID == 0 {
+		c.JSON(422, gin.H{
+			"error": "unauthorised: wrong token",
+		})
+	} else {
+		shared.DeleteSessionsByUserID(userFound.ID)
+		shared.DeletePostsByUserID(userFound.ID)
+		user.DeleteByID(userFound.ID)
+		c.JSON(200, gin.H{
+			"message": "deleted",
 		})
 	}
 }

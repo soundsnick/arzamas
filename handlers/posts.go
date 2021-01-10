@@ -144,14 +144,23 @@ func PostUpdate(c *gin.Context) {
 // PostDelete deletes post
 func PostDelete(c *gin.Context) {
 	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
-	if err != nil {
+	token := c.Query("token")
+	userFound := session.GetUserByToken(token)
+	postFound := post.GetByID(ID)
+	if userFound.ID == 0 || postFound.UserID != userFound.ID {
 		c.JSON(422, gin.H{
-			"error": "wrong id",
+			"error": "unauthorised: wrong token",
 		})
 	} else {
-		post.DeleteByID(ID)
-		c.JSON(200, gin.H{
-			"message": "deleted",
-		})
+		if err != nil {
+			c.JSON(422, gin.H{
+				"error": "wrong id",
+			})
+		} else {
+			post.DeleteByID(ID)
+			c.JSON(200, gin.H{
+				"message": "deleted",
+			})
+		}
 	}
 }

@@ -37,6 +37,8 @@ func main() {
 	router.GET("/users/email/:email", handlers.UserByEmail)
 	router.GET("/users/name/:name", handlers.UsersByName)
 	router.GET("/users/last_name/:name", handlers.UsersByLastName)
+	router.GET("/user/read/:id", handlers.UserRead)
+	router.DELETE("/user/delete", handlers.UserDelete)
 
 	router.POST("/user/auth", handlers.UserAuthenticate)
 	router.POST("/user/register", handlers.UserRegister)
