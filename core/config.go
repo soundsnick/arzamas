@@ -1,4 +1,4 @@
-package config
+package core
 
 import (
 	"encoding/json"
@@ -9,6 +9,9 @@ import (
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+
+	"gorm.io/driver/postgres"
 )
 
 // DatabaseConfig contains database connection info
@@ -39,7 +42,7 @@ var config *Config
 
 // LoadConfig unmarshals config for current GIN_MODE
 func LoadConfig() {
-	data, err := ioutil.ReadFile("config/config.json")
+	data, err := ioutil.ReadFile("core/config.json")
 	if err != nil {
 		panic(err)
 	}
@@ -83,4 +86,20 @@ func UploadsPath() string {
 // GetConnectionString returns a database connection string
 func GetConnectionString() string {
 	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", config.Database.Host, config.Database.User, config.Database.Password, config.Database.Name)
+}
+
+var db *gorm.DB
+
+// SetDB Configures DB
+func SetDB(connection string) {
+	var err error
+	db, err = gorm.Open(postgres.Open(connection), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+}
+
+// GetDB Returns DB Instance
+func GetDB() *gorm.DB {
+	return db
 }

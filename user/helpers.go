@@ -1,13 +1,16 @@
-package helpers
+package user
 
 import (
 	"net"
 	"regexp"
 	"strings"
+
+	"github.com/soundsnick/arzamas/core"
+	"golang.org/x/crypto/bcrypt"
 )
 
-// UserRegistrationForm type for UserRegistration input
-type UserRegistrationForm struct {
+// RegistrationForm type for UserRegistration input
+type RegistrationForm struct {
 	Email                string
 	Name                 string
 	LastName             string
@@ -17,22 +20,22 @@ type UserRegistrationForm struct {
 
 var emailRegex = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
-// ValidateUserRegistration validates UserRegistration input
-func ValidateUserRegistration(form UserRegistrationForm) (string, error) {
+// ValidateRegistrationForm validates UserRegistration input
+func ValidateRegistrationForm(form RegistrationForm) (string, error) {
 	if !IsEmailValid(form.Email) {
-		return "email", ErrValidation
+		return "email", core.ErrValidation
 	}
 	if !IsNameValid(form.Name) {
-		return "name", ErrValidation
+		return "name", core.ErrValidation
 	}
 	if !IsNameValid(form.LastName) {
-		return "last_name", ErrValidation
+		return "last_name", core.ErrValidation
 	}
 	if !IsPasswordValid(form.Password) {
-		return "password", ErrValidation
+		return "password", core.ErrValidation
 	}
 	if !IsPasswordConfirmationValid(form.Password, form.PasswordConfirmation) {
-		return "password_confirmation", ErrValidation
+		return "password_confirmation", core.ErrValidation
 	}
 	return "ok", nil
 }
@@ -78,4 +81,11 @@ func IsPasswordConfirmationValid(password string, passwordConfirmation string) b
 		return false
 	}
 	return true
+}
+
+// EncryptPassword generates hash from password
+func EncryptPassword(password string) (string, error) {
+	var hash []byte
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(hash), err
 }

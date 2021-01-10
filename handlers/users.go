@@ -1,16 +1,17 @@
-package controllers
+package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/soundsnick/arzamas/helpers"
-	"github.com/soundsnick/arzamas/models"
+	"github.com/soundsnick/arzamas/core"
+	"github.com/soundsnick/arzamas/session"
+	"github.com/soundsnick/arzamas/user"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // UserByEmail get user by email
 func UserByEmail(c *gin.Context) {
 	email := c.Param("email")
-	user := models.GetUserByEmail(email)
+	user := user.GetByEmail(email)
 	c.JSON(200, gin.H{
 		"data": user,
 	})
@@ -19,7 +20,7 @@ func UserByEmail(c *gin.Context) {
 // UsersByName get users by name
 func UsersByName(c *gin.Context) {
 	name := c.Param("name")
-	users := models.GetUsersByName(name)
+	users := user.GetByName(name)
 	c.JSON(200, gin.H{
 		"data": users,
 	})
@@ -28,7 +29,7 @@ func UsersByName(c *gin.Context) {
 // UsersByLastName get users by name
 func UsersByLastName(c *gin.Context) {
 	lastName := c.Param("name")
-	users := models.GetUsersByLastName(lastName)
+	users := user.GetByLastName(lastName)
 	c.JSON(200, gin.H{
 		"data": users,
 	})
@@ -41,7 +42,7 @@ func UserAuthenticate(c *gin.Context) {
 
 	if len(email) > 0 && len(password) > 0 {
 		// Get user by email
-		user := models.GetUserByEmail(email)
+		user := user.GetByEmail(email)
 
 		// If user not found by email OR passwords doesn't match
 		if user.ID == 0 || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
@@ -49,10 +50,10 @@ func UserAuthenticate(c *gin.Context) {
 				"error": "wrong email or password",
 			})
 		} else {
-			models.DeleteOrphanSession(c.ClientIP())
+			session.DeleteOrphanSessions(c.ClientIP())
 			// Authorise user and return token
-			session := models.Session{Token: models.GenerateToken(), UserID: user.ID, IP: c.ClientIP()}
-			sessionRes := models.GetDB().Create(&session)
+			session := session.Session{Token: session.GenerateToken(), UserID: user.ID, IP: c.ClientIP()}
+			sessionRes := core.GetDB().Create(&session)
 			if sessionRes.Error != nil {
 				c.JSON(422, gin.H{
 					"error": sessionRes.Error,
@@ -73,7 +74,7 @@ func UserAuthenticate(c *gin.Context) {
 
 // UserRegister registers user
 func UserRegister(c *gin.Context) {
-	form := helpers.UserRegistrationForm{
+	form := user.RegistrationForm{
 		Email:                c.Query("email"),
 		Name:                 c.Query("name"),
 		LastName:             c.Query("last_name"),
@@ -82,19 +83,19 @@ func UserRegister(c *gin.Context) {
 	}
 
 	// Check validation
-	validatedField, validateErr := helpers.ValidateUserRegistration(form)
+	validatedField, validateErr := user.ValidateRegistrationForm(form)
 
 	if validateErr == nil {
 
 		// Check if user exists
-		user := models.GetUserByEmail(form.Email)
-		if user.ID == 0 {
-			userNew := models.User{Name: form.Name, LastName: form.LastName, Email: form.Email, Password: form.Password}
-			models.GetDB().Create(&userNew)
+		userFound := user.GetByEmail(form.Email)
+		if userFound.ID == 0 {
+			userNew := user.User{Name: form.Name, LastName: form.LastName, Email: form.Email, Password: form.Password}
+			core.GetDB().Create(&userNew)
 
 			// Authorise user and return token
-			session := models.Session{Token: models.GenerateToken(), UserID: userNew.ID, IP: c.ClientIP()}
-			sessionRes := models.GetDB().Create(&session)
+			sessionNew := session.Session{Token: session.GenerateToken(), UserID: userNew.ID, IP: c.ClientIP()}
+			sessionRes := core.GetDB().Create(&sessionNew)
 			if sessionRes.Error != nil {
 				c.JSON(422, gin.H{
 					"error": sessionRes.Error,
@@ -102,7 +103,7 @@ func UserRegister(c *gin.Context) {
 			} else {
 				c.JSON(200, gin.H{
 					"user":  userNew,
-					"token": session.Token,
+					"token": sessionNew.Token,
 				})
 			}
 		} else {

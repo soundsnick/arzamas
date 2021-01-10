@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"github.com/soundsnick/arzamas/config"
-	"github.com/soundsnick/arzamas/controllers"
-	"github.com/soundsnick/arzamas/models"
+	"github.com/soundsnick/arzamas/core"
+	"github.com/soundsnick/arzamas/handlers"
+	"github.com/soundsnick/arzamas/post"
+	"github.com/soundsnick/arzamas/session"
+	"github.com/soundsnick/arzamas/user"
 )
 
 func main() {
@@ -13,29 +15,29 @@ func main() {
 
 	// Load configurations
 	initLogger()
-	config.LoadConfig()
-	models.SetDB(config.GetConnectionString())
-	models.AutoMigrate()
+	core.LoadConfig()
+	core.SetDB(core.GetConnectionString())
+	AutoMigrate()
 
 	// Application routes
-	router.GET("/", controllers.IndexPage)
+	router.GET("/", handlers.IndexPage)
 
 	// Post routes
-	// TODO: UPDATE, DELETE
-	router.GET("/posts", controllers.PostIndex)
-	router.GET("/post/read/:id", controllers.PostGet)
-	router.GET("/posts/search", controllers.PostSearch)
-	router.POST("/post/create", controllers.PostCreate)
-	router.DELETE("/post/delete/:id", controllers.PostDelete)
-	router.GET("/posts/user/:user_id", controllers.PostUser)
+	router.GET("/posts", handlers.PostIndex)
+	router.GET("/posts/search", handlers.PostSearch)
+	router.GET("/post/create", handlers.PostCreate)
+	router.GET("/post/read/:id", handlers.PostRead)
+	router.GET("/post/update/:id", handlers.PostUpdate)
+	router.DELETE("/post/delete/:id", handlers.PostDelete)
+	router.GET("/posts/user/:user_id", handlers.PostUser)
 
 	// User routes
-	router.GET("/users/email/:email", controllers.UserByEmail)
-	router.GET("/users/name/:name", controllers.UsersByName)
-	router.GET("/users/last_name/:name", controllers.UsersByLastName)
+	router.GET("/users/email/:email", handlers.UserByEmail)
+	router.GET("/users/name/:name", handlers.UsersByName)
+	router.GET("/users/last_name/:name", handlers.UsersByLastName)
 
-	router.POST("/user/auth", controllers.UserAuthenticate)
-	router.POST("/user/register", controllers.UserRegister)
+	router.GET("/user/auth", handlers.UserAuthenticate)
+	router.GET("/user/register", handlers.UserRegister)
 
 	// Run listener
 	router.Run()
@@ -48,4 +50,9 @@ func initLogger() {
 	if gin.Mode() == gin.DebugMode {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
+}
+
+// AutoMigrate migrates models
+func AutoMigrate() {
+	core.GetDB().AutoMigrate(&user.User{}, &post.Post{}, &session.Session{})
 }
