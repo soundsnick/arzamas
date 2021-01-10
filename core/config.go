@@ -85,6 +85,9 @@ func UploadsPath() string {
 
 // GetConnectionString returns a database connection string
 func GetConnectionString() string {
+	if os.Getenv("POSTGRES_USER") != "" {
+		return fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", os.Getenv("DB_HOST"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB"))
+	}
 	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", config.Database.Host, config.Database.User, config.Database.Password, config.Database.Name)
 }
 
