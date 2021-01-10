@@ -3,6 +3,7 @@ package handlers
 import (
 	"strconv"
 
+	"github.com/soundsnick/arzamas/comment"
 	"github.com/soundsnick/arzamas/shared"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +35,7 @@ func PostSearch(c *gin.Context) {
 	}
 }
 
-// PostUser user's posts
+// PostUser returns posts of user
 func PostUser(c *gin.Context) {
 	userID, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
 	if err != nil {
@@ -44,6 +45,21 @@ func PostUser(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{
 			"data": post.GetByUserID(userID),
+		})
+	}
+}
+
+// PostComments returns post comments
+func PostComments(c *gin.Context) {
+	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	post := post.GetByID(ID)
+	if err != nil {
+		c.JSON(422, gin.H{
+			"error": "id required",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"data": comment.GetByPostID(post.ID),
 		})
 	}
 }

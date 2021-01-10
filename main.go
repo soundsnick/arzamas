@@ -27,6 +27,7 @@ func main() {
 	router.GET("/posts", handlers.PostIndex)
 	router.GET("/posts/search", handlers.PostSearch)
 	router.GET("/posts/user/:user_id", handlers.PostUser)
+	router.GET("/post/comments/:id", handlers.PostComments)
 
 	// Post CRUD
 	router.POST("/post/create", handlers.PostCreate)
@@ -36,6 +37,9 @@ func main() {
 
 	// Comment CRUD
 	router.POST("/comment/create/:id", handlers.CommentCreate)
+	router.GET("/comment/read/:id", handlers.CommentRead)
+	router.PUT("/comment/update/:id", handlers.CommentUpdate)
+	router.DELETE("/comment/delete/:id", handlers.CommentDelete)
 
 	// User routes
 	router.GET("/users/email/:email", handlers.UserByEmail)
