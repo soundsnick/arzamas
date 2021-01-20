@@ -12,7 +12,6 @@ import (
 	"github.com/soundsnick/arzamas/session"
 )
 
-// PostIndex returns all posts
 func PostIndex(c *gin.Context) {
 	posts := post.GetAll()
 	c.JSON(200, gin.H{
