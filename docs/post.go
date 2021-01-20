@@ -4,5 +4,7 @@ var PostIndex = HandlerDocs{
 	Route: "/posts",
 	Description: "Get all posts",
 	Method: "GET",
-	Params: "",
+	Params: []HandlerDocsParam{
+		HandlerDocsParam{ Name: "", Type: "" },
+	},
 }
