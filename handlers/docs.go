@@ -7,6 +7,33 @@ import (
 
 func DocsIndex(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"posts": docs.PostIndex,
+		"posts": "/docs/posts",
+		"users": "/docs/users",
+	})
+}
+
+func DocsPosts(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"index":    docs.PostIndex,
+		"search":   docs.PostSearch,
+		"user":     docs.PostUser,
+		"comments": docs.PostComments,
+		"create":   docs.PostCreate,
+		"get":      docs.PostGet,
+		"update":   docs.PostUpdate,
+		"delete":   docs.PostDelete,
+	})
+}
+
+func DocsUsers(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"authenticate":     docs.UserAuthenticate,
+		"register":         docs.UserRegister,
+		"read":             docs.UserRead,
+		"update":           docs.UserUpdate,
+		"delete":           docs.UserDelete,
+		"get by email":     docs.UserByEmail,
+		"get by name":      docs.UsersByName,
+		"get by last name": docs.UsersByLastName,
 	})
 }

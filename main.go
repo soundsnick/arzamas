@@ -57,6 +57,8 @@ func main() {
 
 	// Docs
 	router.GET("/docs", handlers.DocsIndex)
+	router.GET("/docs/posts", handlers.DocsPosts)
+	router.GET("/docs/users", handlers.DocsUsers)
 
 	// Run listener
 	router.Run()
