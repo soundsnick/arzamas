@@ -1,10 +1,10 @@
 package docs
 
 var PostIndex = HandlerDocs{
-	Route: "/posts",
+	Route:       "/posts",
 	Description: "Get all posts",
-	Method: "GET",
+	Method:      "GET",
 	Params: []HandlerDocsParam{
-		HandlerDocsParam{ Name: "", Type: "" },
+		HandlerDocsParam{Name: "", Type: ""},
 	},
 }

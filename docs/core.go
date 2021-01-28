@@ -1,13 +1,13 @@
-package docs 
+package docs
 
 type HandlerDocsParam struct {
-	Name string 
+	Name string
 	Type string
 }
 
 type HandlerDocs struct {
-	Route  string	
+	Route       string
 	Description string
-	Method string	
-	Params []HandlerDocsParam
+	Method      string
+	Params      []HandlerDocsParam
 }
