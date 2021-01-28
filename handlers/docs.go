@@ -9,6 +9,7 @@ func DocsIndex(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"posts": "/docs/posts",
 		"users": "/docs/users",
+		"comment": "/docs/comments",
 	})
 }
 
@@ -35,5 +36,14 @@ func DocsUsers(c *gin.Context) {
 		"get by email":     docs.UserByEmail,
 		"get by name":      docs.UsersByName,
 		"get by last name": docs.UsersByLastName,
+	})
+}
+
+func DocsComments(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"create": docs.CommentCreate,
+		"read": docs.CommentRead,
+		"update": docs.CommentUpdate,
+		"delete": docs.CommentDelete,
 	})
 }
