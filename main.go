@@ -55,6 +55,12 @@ func main() {
 	router.POST("/user/auth", handlers.UserAuthenticate)
 	router.POST("/user/register", handlers.UserRegister)
 
+	// Docs
+	router.GET("/docs", handlers.DocsIndex)
+	router.GET("/docs/posts", handlers.DocsPosts)
+	router.GET("/docs/users", handlers.DocsUsers)
+	router.GET("/docs/comments", handlers.DocsComments)
+
 	// Run listener
 	router.Run()
 }
