@@ -3,9 +3,10 @@ package tests
 import (
 	"testing"
 
-	"github.com/soundsnick/arzamas/helpers"
+	helpers "github.com/soundsnick/arzamas/user"
 )
 
+// TestIsEmailValid is a test case that checks email
 func TestIsEmailValid(t *testing.T) {
 	validMx := "example@gmail.com"
 	invalidMx := "example@golangcode-example.com"
@@ -26,6 +27,7 @@ func TestIsEmailValid(t *testing.T) {
 	}
 }
 
+// TestIsNameValid is a test case that checks name
 func TestIsNameValid(t *testing.T) {
 	valid := "yernazar"
 	invalidLength := "y"
@@ -42,6 +44,7 @@ func TestIsNameValid(t *testing.T) {
 	}
 }
 
+// TestIsPasswordConfirmationValid is a test cast that checks password
 func TestIsPasswordConfirmationValid(t *testing.T) {
 	password := "qwerty"
 	passwordInvalid := "qwe"
