@@ -9,9 +9,9 @@ import (
 type Post struct {
 	core.Model
 
-	Title   string `form:"title" binding:"required"`
-	Content string `form:"content"`
-	Cover   string `form:"cover"`
-	UserID  uint64
+	Title   string    `form:"title" binding:"required" json:"title"`
+	Content string    `form:"content" json:"content"`
+	Cover   string    `form:"cover" json:"cover"`
+	UserID  uint64    `form:"user_id" json:"user_id"`
 	User    user.User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
 }

@@ -8,8 +8,8 @@ import (
 
 // Model - General struct for models
 type Model struct {
-	ID        uint64         `form:"id" gorm:"primary_key"`
-	CreatedAt time.Time      `binding:"-" form:"-"`
-	UpdatedAt time.Time      `binding:"-" form:"-"`
-	DeletedAt gorm.DeletedAt `binding:"-" form:"-" gorm:"index"`
+	ID        uint64         `form:"id" gorm:"primary_key" json:"id"`
+	CreatedAt time.Time      `binding:"-" form:"-" json:"created_at"`
+	UpdatedAt time.Time      `binding:"-" form:"-" json:"updated_at"`
+	DeletedAt gorm.DeletedAt `binding:"-" form:"-" gorm:"index" json:"deleted_at"`
 }

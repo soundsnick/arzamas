@@ -13,9 +13,9 @@ type User struct {
 	core.Model
 
 	Email    string `form:"email" binding:"required" json:"-"`
-	Name     string `form:"name"`
-	LastName string `form:"last_name"`
-	Avatar   string `form:"avatar"`
+	Name     string `form:"name" json:"name"`
+	LastName string `form:"last_name" json:"last_name"`
+	Avatar   string `form:"avatar" json:"avatar"`
 	Password string `form:"password" binding:"required" json:"-"`
 }
 
