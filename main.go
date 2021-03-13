@@ -13,6 +13,7 @@ import (
 
 func main() {
 	router := gin.Default()
+	router.Use(CORSMiddleware())
 
 	// Load configurations
 	initLogger()
@@ -25,6 +26,7 @@ func main() {
 
 	// Post routes
 	router.GET("/posts", handlers.PostIndex)
+	router.GET("/posts/last", handlers.PostLast)
 	router.GET("/posts/search", handlers.PostSearch)
 	router.GET("/posts/user/:user_id", handlers.PostUser)
 	router.GET("/post/comments/:id", handlers.PostComments)
@@ -48,6 +50,7 @@ func main() {
 
 	// User CRUD(RUD)
 	router.GET("/user/read/:id", handlers.UserRead)
+	router.GET("/user/readByToken", handlers.UserReadByToken)
 	router.PUT("/user/update", handlers.UserUpdate)
 	router.DELETE("/user/delete", handlers.UserDelete)
 
@@ -77,4 +80,22 @@ func initLogger() {
 // AutoMigrate migrates models
 func AutoMigrate() {
 	core.GetDB().AutoMigrate(&user.User{}, &post.Post{}, &session.Session{}, &comment.Comment{})
+}
+
+// CORSMiddleware makes cors real
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }

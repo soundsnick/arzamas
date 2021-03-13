@@ -13,6 +13,13 @@ func GetAll() []Post {
 	return posts
 }
 
+// GetLast returns a collection of all posts
+func GetLast() []Post {
+	var posts []Post
+	core.GetDB().Preload("User").Order("created_at desc").Limit(9).Find(&posts)
+	return posts
+}
+
 // GetByID return post by id
 func GetByID(id uint64) Post {
 	var post Post

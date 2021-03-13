@@ -20,6 +20,14 @@ func PostIndex(c *gin.Context) {
 	})
 }
 
+// PostLast
+func PostLast(c *gin.Context) {
+	posts := post.GetLast()
+	c.JSON(200, gin.H{
+		"data": posts,
+	})
+}
+
 // PostSearch searches posts by query
 func PostSearch(c *gin.Context) {
 	query := c.Query("query")

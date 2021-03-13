@@ -51,7 +51,7 @@ func UserAuthenticate(c *gin.Context) {
 		// If user not found by email OR passwords doesn't match
 		if user.ID == 0 || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 			c.JSON(422, gin.H{
-				"error": "wrong email or password",
+				"error": "wrong_credentials",
 			})
 		} else {
 			session.DeleteOrphanSessions(c.ClientIP())
@@ -71,7 +71,7 @@ func UserAuthenticate(c *gin.Context) {
 		}
 	} else {
 		c.JSON(400, gin.H{
-			"error": "email and password required",
+			"error": "wrong_input",
 		})
 	}
 }
@@ -128,6 +128,20 @@ func UserRead(c *gin.Context) {
 	ID, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	userFound := user.GetByID(ID)
 	if userFound.ID == 0 || err != nil {
+		c.JSON(200, gin.H{
+			"error": "not found",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"data": userFound,
+		})
+	}
+}
+
+// UserReadByToken reads user using token
+func UserReadByToken(c *gin.Context) {
+	userFound := session.GetUserByToken(c.Query("token"))
+	if userFound.ID == 0 {
 		c.JSON(200, gin.H{
 			"error": "not found",
 		})
