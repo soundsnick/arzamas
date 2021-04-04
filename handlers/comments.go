@@ -24,7 +24,7 @@ func CommentCreate(c *gin.Context) {
 		})
 	} else {
 		if content != "" && len(content) > 2 {
-			commentNew := comment.Comment{Content: content, UserID: userFound.ID, PostID: postFound.ID}
+			commentNew := comment.Comment{Content: content, UserID: userFound.ID, PostID: postFound.ID, User: userFound, Post: postFound}
 			core.GetDB().Create(&commentNew)
 			c.JSON(200, gin.H{
 				"data": commentNew,

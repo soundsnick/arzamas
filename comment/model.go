@@ -10,9 +10,9 @@ import (
 type Comment struct {
 	core.Model
 
-	Content string `form:"content" binding:"required"`
-	PostID  uint64
-	Post    post.Post `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
-	UserID  uint64
-	User    user.User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false"`
+	Content string `form:"content" binding:"required" json:"content"`
+	PostID  uint64 `json:"post_id"`
+	Post    post.Post `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false" json:"post"`
+	UserID  uint64 `json:"user_id"`
+	User    user.User `binding:"-" gorm:"association_autoupdate:false;association_autocreate:false" json:"user"`
 }

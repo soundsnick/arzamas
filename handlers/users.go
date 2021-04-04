@@ -39,6 +39,22 @@ func UsersByLastName(c *gin.Context) {
 	})
 }
 
+// UserLogout deletes token
+func UserLogout(c *gin.Context) {
+	token := c.Query("token")
+
+	if len(token) > 0 {
+		session.DeleteSessions(token)
+		c.JSON(200, gin.H{
+			"message": "deleted",
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"message": "token not found",
+		})
+	}
+}
+
 // UserAuthenticate authenticates user by email and password
 func UserAuthenticate(c *gin.Context) {
 	email := c.Query("email")
@@ -142,7 +158,7 @@ func UserRead(c *gin.Context) {
 func UserReadByToken(c *gin.Context) {
 	userFound := session.GetUserByToken(c.Query("token"))
 	if userFound.ID == 0 {
-		c.JSON(200, gin.H{
+		c.JSON(422, gin.H{
 			"error": "not found",
 		})
 	} else {

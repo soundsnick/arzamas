@@ -32,8 +32,9 @@ func PostLast(c *gin.Context) {
 func PostSearch(c *gin.Context) {
 	query := c.Query("query")
 	if query == "" {
-		c.JSON(422, gin.H{
-			"error": "'query' required",
+		posts := post.GetLast()
+		c.JSON(200, gin.H{
+			"data": posts,
 		})
 	} else {
 		posts := post.GetByTitle(query)

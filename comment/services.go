@@ -14,7 +14,7 @@ func GetByID(ID uint64) Comment {
 // GetByPostID return comments by post
 func GetByPostID(ID uint64) []Comment {
 	var comments []Comment
-	core.GetDB().Preload("User").Preload("Post").Where("post_id = ?", ID).Find(&comments)
+	core.GetDB().Preload("User").Preload("Post").Where("post_id = ?", ID).Order("created_at desc").Find(&comments)
 	return comments
 }
 

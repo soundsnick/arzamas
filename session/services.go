@@ -11,6 +11,12 @@ func DeleteOrphanSessions(ip string) {
 	core.GetDB().Where("ip = ?", ip).Delete(&sessions)
 }
 
+// DeleteSessions deletes currently active sessions from the same IP
+func DeleteSessions(token string) {
+	var sessions []Session
+	core.GetDB().Where("token = ?", token).Delete(&sessions)
+}
+
 // GetUserByToken returns user by token
 func GetUserByToken(token string) user.User {
 	var session Session
