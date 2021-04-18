@@ -8,6 +8,7 @@ import (
 type CreationForm struct {
 	Title   string
 	Content string
+	Description string
 	Cover   string
 	Token   string
 }
@@ -19,6 +20,9 @@ func ValidateCreationForm(form CreationForm) (string, error) {
 	}
 	if !IsContentValid(form.Content) {
 		return "content", core.ErrValidation
+	}
+	if !IsContentValid(form.Description) {
+		return "description", core.ErrValidation
 	}
 	if !core.IsURL(form.Cover) {
 		return "cover", core.ErrValidation
@@ -40,6 +44,13 @@ func ValidateUpdateForm(form *CreationForm, postCurrent Post) (string, error) {
 		}
 	} else {
 		form.Content = postCurrent.Content
+	}
+	if form.Description != "" {
+		if !IsContentValid(form.Description) {
+			return "description", core.ErrValidation
+		}
+	} else {
+		form.Description = postCurrent.Description
 	}
 	if form.Cover != "" {
 		if !core.IsURL(form.Cover) {

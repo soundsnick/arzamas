@@ -78,6 +78,7 @@ func PostCreate(c *gin.Context) {
 	form := post.CreationForm{
 		Title:   c.Query("title"),
 		Content: c.Query("content"),
+		Description: c.Query("description"),
 		Cover:   c.Query("cover"),
 		Token:   c.Query("token"),
 	}
@@ -99,6 +100,7 @@ func PostCreate(c *gin.Context) {
 			post := post.Post{
 				Title:   form.Title,
 				Content: form.Content,
+				Description: form.Description,
 				Cover:   form.Cover,
 				UserID:  user.ID,
 				User:    user,
@@ -133,6 +135,7 @@ func PostUpdate(c *gin.Context) {
 	form := post.CreationForm{
 		Title:   c.Query("title"),
 		Content: c.Query("content"),
+		Description: c.Query("description"),
 		Cover:   c.Query("cover"),
 		Token:   c.Query("token"),
 	}
@@ -158,6 +161,7 @@ func PostUpdate(c *gin.Context) {
 			} else {
 				postFound.Title = form.Title
 				postFound.Content = form.Content
+				postFound.Description = form.Description
 				postFound.Cover = form.Cover
 				core.GetDB().Save(&postFound)
 				c.JSON(200, gin.H{
